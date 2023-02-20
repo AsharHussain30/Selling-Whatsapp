@@ -1,0 +1,117 @@
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
+import React from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
+import {useEffect} from 'react';
+import {useState} from 'react';
+
+const StatusEditScreen = ({route}) => {
+  const {width, height} = Dimensions.get('window');
+
+  const [sendImg, setSendImg] = useState([]);
+
+  const navigation = useNavigation();
+  const currentId = auth().currentUser.uid;
+
+  const Me = firestore().collection('users').doc(currentId);
+
+  const img = route.params.params;
+
+
+  const sendStatus = () => {
+    if (sendImg.length > 0) {
+    } else {
+      sendImg.splice(sendImg.length, 0, {img});
+    }
+
+    const user = firestore().collection('users').doc(currentId);
+
+    user.update({
+      sendImg,
+
+    });
+
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    const user = firestore()
+      .collection('Status')
+      .doc(currentId)
+      .collection('Array')
+      .onSnapshot(snap => {
+        const data = snap.docs.map(item => item.data());
+        setSendImg(data);
+      });
+
+    const getData = firestore()
+      .collection('Status')
+      .doc(currentId)
+      .collection('Array')
+      .add({
+      img,
+      createdAt: Date.now(),
+    });
+
+    // return user,getData
+  }, []);
+
+  return (
+    <View style={{flex: 1}}>
+      <StatusBar hidden />
+      <Image
+        source={{uri: img}}
+        style={{resizeMode: 'contain', height: '100%', width: '100%'}}
+      />
+      <TouchableOpacity
+        onPress={() => navigation.goBack('')}
+        style={{alignSelf: 'flex-start', position: 'absolute', margin: 15}}>
+        <Entypo name="cross" size={34} color="white" />
+      </TouchableOpacity>
+      <View
+        style={{
+          width: '39%',
+          height: '5%',
+          backgroundColor: '#408c7c',
+          bottom: 10,
+          left: 15,
+          position: 'absolute',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+          borderRadius: 25,
+        }}>
+        {/* <Image
+          source={require('../Assets/status.png')}
+          style={{height: 20, width: 30, right: 10}}
+        /> */}
+        <Text style={{color: 'white', textAlign: 'center'}}>Status</Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: '#408c7c',
+          borderRadius: 50,
+          padding: 10,
+          position: 'absolute',
+          bottom: 0,
+          alignSelf: 'flex-end',
+          right: 10,
+          bottom: 10,
+        }}>
+        <TouchableOpacity onPress={() => sendStatus()}>
+          <MaterialCommunityIcons name="send" size={20} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default StatusEditScreen;
