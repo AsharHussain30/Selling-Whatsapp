@@ -9,48 +9,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 import Calls from './Calls';
-import CustomHeader from "./Menu"
-import {Provider, Menu, Divider} from 'react-native-paper';
 
 const MainTab = () => {
-  const [showMenu, setShowMenu] = useState(false);
 
   const Tab = createMaterialTopTabNavigator();
 
-  const [visible, setVisible] = React.useState(false);
-
-  const openMenu = () => setVisible(true);
-
-  const closeMenu = () => setShowMenu(false);
-
-  {
-    /* <TouchableOpacity
-onPress={() => {
-  Animated.timing(scale, {
-    toValue: showMenu ? 1 : 1,
-    duration: 400,
-    useNativeDriver: true,
-  }).start();
-  Animated.timing(moveToRight, {
-    toValue: showMenu ? 0 : -300,
-    duration: 400,
-    useNativeDriver: true,
-  }).start();
-  setShowMenu(!showMenu);
-}}
-style={{
-  position: 'absolute',
-  right: 5,
-  marginTop: 15,
-}}>
-<MaterialCommunityIcons
-name="dots-vertical"
-size={24}
-color="white"
-/>
-</TouchableOpacity> */
-  }
-  return (
+return (
       <Tab.Navigator
         initialRouteName="Chat"
         screenOptions={{

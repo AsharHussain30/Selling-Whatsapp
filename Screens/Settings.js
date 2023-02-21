@@ -194,6 +194,7 @@ const Settings = ({navigation}) => {
             About and Help
           </Text>
         </View>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
         <View
           style={{
             flexDirection: 'row',
@@ -207,6 +208,7 @@ const Settings = ({navigation}) => {
             LogOut
           </Text>
         </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

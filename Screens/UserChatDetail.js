@@ -24,34 +24,32 @@ import {
 } from 'react-native-gifted-chat';
 import UserChatMenu from './UserChatMenu';
 import Chat from './Chat.json';
-import Users from "./Users.json" 
-
-
-
-
+import Users from './Users.json';
+import {Provider, Menu} from 'react-native-paper';
 
 const UserChatDetail = ({route, navigation}) => {
+  const uid = route.params.params.uid;
 
-const uid = route.params.params.uid
-
-
-let chatMessages = Chat[0][uid];
-chatMessages = chatMessages.map(m => ({...m, createdAt: new Date(m.createdAt)}))
-const [messages, setMessages] = useState(chatMessages);
+  let chatMessages = Chat[0][uid];
+  chatMessages = chatMessages.map(m => ({
+    ...m,
+    createdAt: new Date(m.createdAt),
+  }));
+  const [messages, setMessages] = useState(chatMessages);
   const [users, setUsers] = useState();
-  
+
   const onSend = messages => {
     const msg = messages[0];
-    
+
     const myMsg = {
       ...msg,
       senderId: 'MyId',
       receiverId: 'ReceiverID',
     };
-    
+
     setMessages(previousMessages => GiftedChat.append(previousMessages, myMsg));
   };
-  
+
   function renderInputToolbar(props) {
     return (
       <View style={{flex: 1, bottom: 3}}>
@@ -63,7 +61,7 @@ const [messages, setMessages] = useState(chatMessages);
             marginVertical: 6,
           }}
           {...props}
-          />
+        />
       </View>
     );
   }
@@ -71,58 +69,76 @@ const [messages, setMessages] = useState(chatMessages);
   function renderDay(props) {
     return (
       <Day
-      {...props}
-      textStyle={{
-        color: '#647279',
-        backgroundColor: '#d4eaf5',
-        padding: 5,
-        borderRadius: 5,
-      }}
+        {...props}
+        textStyle={{
+          color: '#647279',
+          backgroundColor: '#d4eaf5',
+          padding: 5,
+          borderRadius: 5,
+        }}
       />
-      );
-    }
-    
-    const [press, setPress] = useState();
-    
-    const Menu = () => {
-      return (
-      <View
-      style={{
-          backgroundColor: 'white',
-          padding: 20,
-          borderTopLeftRadius: 25,
-          borderBottomLeftRadius: 25,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginHorizontal: 0,
-          width: '30%',
-          alignSelf: 'flex-end',
-          borderWidth: 0.4,
-          position: 'absolute',
-          top: 0,
-        }}>
-        <Text style={{paddingVertical: 10}}>. Menu</Text>
-        <Text style={{paddingVertical: 10}}>. Menu</Text>
-        <Text style={{paddingVertical: 10}}>. Menu</Text>
-      </View>
     );
-  };
-  
-  
-  useEffect(() => {
-  },[])
-  
+  }
+
+  const [press, setPress] = useState(false);
+
+  const openMenu = () => setPress(true);
+
+  const closeMenu = () => setPress(false);
+
+  //   const Menu = () => {
+  //     return (
+
+  //         );
+  // };
+
+  useEffect(() => {}, []);
+
   const {height, width} = Dimensions.get('window');
   return (
     <View style={{flex: 1}}>
       <StatusBar hidden />
 
-      <UserChatMenu params={route.params.params} setPress={setPress} />
+      <UserChatMenu params={route.params.params}/>
 
       <ImageBackground
         source={require('../assets/chatBG.jpg')}
         style={{height: height, width: width, resizeMode: 'contain', flex: 1}}>
-        {press != false ? null : <Menu />}
+        <View
+          style={{
+            zIndex: 1,
+            height:"100%",
+            width: '100%',
+            position: 'absolute',
+            top:0,
+            left:0,
+          }}>
+          <Provider>
+            <Menu
+              visible={press}
+              anchorPosition="top"
+              contentStyle={{backgroundColor: 'white',left:197,bottom:125}}
+              onDismiss={closeMenu}
+              anchor={
+                <TouchableOpacity onPress={openMenu} style={{top:-43,left:370,right:0}}>
+                  <MaterialCommunityIcons
+                    name="dots-vertical"
+                    size={25}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              }>
+              <Menu.Item onPress={() => {}} title="Label Chat" style={{}} />
+              <Menu.Item onPress={() => {}} title="View contact" style={{}} />
+              <Menu.Item onPress={() => {}} title="Media, links, and docs" style={{}} />
+              <Menu.Item onPress={() => {}} title="Mute Notification" style={{}} />
+              <Menu.Item onPress={() => {}} title="Disappearing messages" style={{}} />
+              <Menu.Item onPress={() => {}} title="Wallpaper" style={{}} />
+              <Menu.Item onPress={() => {}} title="More" style={{}} />
+            </Menu>
+          </Provider>
+        </View>
+
         <View style={{flex: 1}}>
           <GiftedChat
             timeTextStyle={{
@@ -134,32 +150,32 @@ const [messages, setMessages] = useState(chatMessages);
             renderDay={renderDay}
             renderBubble={props => {
               return (
-                  <Bubble
-                    {...props}
-                    wrapperStyle={{
-                      right: {
-                        backgroundColor: '#e2ffc7',
-                        shadowColor: 'black',
-                        bottom: 5,
-                        elevation: 5,
-                        marginVertical: 6,
-                      },
-                      left: {
-                        backgroundColor: '#ffffff',
-                        marginLeft: -30,
-                        elevation: 5,
-                        marginVertical: 6,
-                      },
-                    }}
-                    textStyle={{
-                      left: {color: 'black'},
-                      right: {color: 'black'},
-                    }}
-                  />
+                <Bubble
+                  {...props}
+                  wrapperStyle={{
+                    right: {
+                      backgroundColor: '#e2ffc7',
+                      shadowColor: 'black',
+                      bottom: 5,
+                      elevation: 5,
+                      marginVertical: 6,
+                    },
+                    left: {
+                      backgroundColor: '#ffffff',
+                      marginLeft: -30,
+                      elevation: 5,
+                      marginVertical: 6,
+                    },
+                  }}
+                  textStyle={{
+                    left: {color: 'black'},
+                    right: {color: 'black'},
+                  }}
+                />
               );
             }}
             renderInputToolbar={renderInputToolbar}
-            renderSend={(props) => {
+            renderSend={props => {
               return (
                 <Send {...props}>
                   <View style={{}}>
@@ -184,7 +200,7 @@ const [messages, setMessages] = useState(chatMessages);
             onSend={messages => onSend(messages)}
             user={{
               _id: 'MyId',
-              received:true
+              received: true,
             }}
           />
         </View>

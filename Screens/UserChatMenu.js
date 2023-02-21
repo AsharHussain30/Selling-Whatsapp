@@ -4,28 +4,10 @@ import {useEffect} from 'react';
 import {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
-import { useRef } from 'react';
 
-const UserChatMenu = ({params,setPress}) => {
+const UserChatMenu = ({params}) => {
   const navigation = useNavigation();
-  
-  const HomeMenuDrawerAnimation = useRef(new Animated.Value(0)).current;
-  
-  const [showMenu, setShowMenu] = useState(false)
-
-  const MenuAnimation = () => {
-    Animated.timing(HomeMenuDrawerAnimation, {
-      toValue: showMenu ? 0 : 960,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    setShowMenu(!showMenu)
-  }
-  
-  const pressFunc = () => {
-    setShowMenu(!showMenu)    
-    setPress(showMenu)
-  }
+    
 
   return (
     <View
@@ -73,16 +55,6 @@ const UserChatMenu = ({params,setPress}) => {
         }}>
           Online
       </Text>
-      </View>
-      <View style={{flex: 1}}>
-        <TouchableOpacity onPress={() => pressFunc()}>
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={25}
-            color="white"
-            style={{alignSelf: 'flex-end'}}
-          />
-        </TouchableOpacity>
       </View>
     </View>
   );

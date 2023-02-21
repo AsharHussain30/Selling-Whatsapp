@@ -1,27 +1,9 @@
 import {
-  Alert,
-  Dimensions,
-  RefreshControl,
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  Animated,
-  TouchableOpacity,
-  View,
-  FlatList,
-  ScrollView,
   StatusBar,
-  TouchableNativeFeedback,
   Pressable,
 } from 'react-native';
-import React, {createContext, useCallback, useEffect, useState} from 'react';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import React, {createContext, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Status from './Screens/Status';
 import Chats from './Screens/Chats';
@@ -29,10 +11,6 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import UserChatDetail from './Screens/UserChatDetail';
 import ImagePicker from './Screens/ImagePicker';
 import AuthSplash from './Screens/AuthNavigation/AuthSplash';
-import {ForgotPassword} from './Screens/AuthNavigation/ForgotPassword';
-import SignIn from './Screens/AuthNavigation/SignIn';
-import {SignUp} from './Screens/AuthNavigation/SignUp';
-import {useRef} from 'react';
 import UserStatuses from './Screens/UserStatuses';
 import StatusEditScreen from './Screens/StatusEditScreen';
 import MyStatuses from './Screens/MyStatuses';
@@ -41,7 +19,6 @@ import Settings from './Screens/Settings';
 import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 import {Value} from 'react-native-reanimated';
-import {MotiView, useAnimationState} from 'moti';
 import { Started } from './Screens/Started';
 import TabBar from './Screens/MainTab';
 import MainTab from './Screens/MainTab';
@@ -78,16 +55,6 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="ForgotPassword"
-          component={ForgotPassword}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
           name="StatusEdit"
           component={StatusEditScreen}
           options={{headerShown: false}}
@@ -97,11 +64,6 @@ const App = () => {
           component={MainTab}
           options={{header:() => <CustomHeader props={setPress}/>}}
         />
-        {/* <Stack.Screen
-          name="Menu"
-          component={Menu}
-          options={{headerShown: false}}
-        /> */}
         <Stack.Screen
           name="Settings"
           component={Settings}

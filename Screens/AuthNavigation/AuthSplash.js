@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Dimensions, ImageBackground } from 'react-native'
+import {View,Image} from 'react-native'
 import React,{useEffect} from 'react'
 import { StackActions, useNavigation } from '@react-navigation/native'
 
@@ -17,5 +17,3 @@ const AuthSplash = () => {
 }
 
 export default AuthSplash
-
-const styles = StyleSheet.create({})

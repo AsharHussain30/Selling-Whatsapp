@@ -49,20 +49,17 @@ const Status = ({navigation}) => {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
       onRefresh();
-    });
-    return unsubscribe;
   }, []);
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
-  }, []);
+  }
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
