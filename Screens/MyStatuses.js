@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Animated,
+  ActivityIndicator
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
@@ -14,17 +15,16 @@ import {NavigationContext} from 'react-navigation';
 import {useEffect} from 'react';
 import {useCallback} from 'react';
 import {PanGestureHandler} from 'react-native-gesture-handler';
+import Feather from "react-native-vector-icons/Feather"
 
 const {height, width} = Dimensions.get('window');
 
 const MyStatuses = ({navigation, route}) => {
   const [current, setCurrent] = useState(0);
 
+  const [IsLoading, setIsLoading] = useState(false);
+
   const [enable, setEnable] = useState(true);
-
-  const [update, setUpdate] = useState(false);
-
-  const [image, setImage] = useState();
 
   const [content, setContent] = useState([
    {
@@ -93,16 +93,7 @@ const MyStatuses = ({navigation, route}) => {
   };
   
   
-  
-  useEffect(() => {
-    }, []);
-  
-  
-  // console.log(route.params.getImage[0].img);
     
-  
-  const userProfile = image ? image : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi0ToKk_pNdClvoT5zslZZ6iQV_xOVIktrsuYUt1FRunsvtjpXmW9lnTWzD8N1t2KLLnw&usqp=CAU"
-  
   return (
     <View>
       <TouchableOpacity
@@ -113,13 +104,18 @@ const MyStatuses = ({navigation, route}) => {
         activeOpacity={1}
         >
         <StatusBar hidden />
+        <View style={{justifyContent:"center",alignItems:"center",width: "100%", height: "100%",display:IsLoading ? "flex" : "none",backgroundColor:"green"}}>
+          <ActivityIndicator/>
+          </View>
         <Image
           source={{uri: content[current].image}}
+          onLoad={() => {setIsLoading(!IsLoading)}}
           onLoadEnd={() => {
             progress.setValue(0);
             start();
+            setIsLoading(false)
           }}
-          style={{resizeMode: 'cover', height: height,}}
+          style={{resizeMode: 'cover', height: height,display:IsLoading ? "none" : "flex"}}
         />
         <View
           style={{
@@ -128,7 +124,7 @@ const MyStatuses = ({navigation, route}) => {
             position: 'absolute',
             justifyContent: 'space-evenly',
             alignItems: 'center',
-            flexDirection: 'row',
+            flexDirection:"row"
           }}>
           {content.map((item, index) => {
             return (
@@ -168,9 +164,11 @@ const MyStatuses = ({navigation, route}) => {
             onPress={() => {
               previous();
             }}>
-            <View style={{top: 30, left: 10, flexDirection: 'row',opacity:enable == true ? 1 : 0}}>
+              <View></View>
+          </TouchableOpacity>
+          <View style={{top: 30, left: 10,position:"absolute", flexDirection: 'row',opacity:enable == true ? 1 : 0}}>
               <Image
-                source={{uri: userProfile}}
+                source={require("../assets/profile.jpg")}
                 style={{height: 55, width: 55, borderRadius: 50,}}
               />
               <Text
@@ -180,10 +178,13 @@ const MyStatuses = ({navigation, route}) => {
                   textAlignVertical: 'center',
                   paddingLeft: 10,
                 }}>
-               {route.params.currentName}
+                  Harry Potter
               </Text>
             </View>
-          </TouchableOpacity>
+          <View style={{position:"absolute",bottom:0,left:0,right:0,opacity: enable == true ? 1 : 0}}>
+                <Feather name="chevron-up" size={24} color="white" style={{alignSelf:"center",top:10}}/>
+              <Text style={{color:"white",padding:30,textAlign:"center",bottom:10}}>Reply</Text>
+            </View>
           <TouchableOpacity
             style={{width: '30%', height: '100%'}}
             onPress={() => {

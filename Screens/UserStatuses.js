@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Animated,
+  ActivityIndicator
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
@@ -13,30 +14,18 @@ import {useRef} from 'react';
 import {useEffect} from 'react';
 import {useCallback} from 'react';
 import {PanGestureHandler} from 'react-native-gesture-handler';
-
+import Feather from "react-native-vector-icons/Feather"
+// import { ActivityIndicator } from 'react-native-paper';
 const {height, width} = Dimensions.get('window');
 
 const UserStatuses = ({navigation, route}) => {
   const [current, setCurrent] = useState(0);
+  const [IsLoading, setIsLoading] = useState(false);
+
 
   const [enable, setEnable] = useState(true);
 
-  const [update, setUpdate] = useState(false);
-
-  const [image, setImage] = useState();
-
   const [content, setContent] = useState(
-    //  {
-    //    image:
-    //      'https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    //  },
-    //  {
-    //    image:
-    //      'https://www.teahub.io/photos/full/94-942521_cell-phone-wallpaper-nature-sexy-men-women-car.jpg',
-    //  },
-    //  {
-    //    image: 'https://pbs.twimg.com/media/EZUWw7uUwAMdeFi.jpg',
-    //  },
     route.params.item.sendImg ? route.params.item.sendImg : [{image: "https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}]
   );
 
@@ -90,21 +79,6 @@ const UserStatuses = ({navigation, route}) => {
     navigation.goBack();
   };
 
-  
-
-  useEffect(() => {
-    const currentId = auth().currentUser.uid;
-
-    const Me = firestore().collection('users').doc(currentId);
-
-    Me.onSnapshot(QuerySnapShot => {
-      const me = QuerySnapShot.data();
-      setImage(me.image);
-    });
-  }, []);
-
-
-  // console.log(route.params.getImage[0].img);
 
   const imgProvider = route.params.item.sendImg ? route.params.item.sendImg[current].img : "https://i.pinimg.com/originals/85/ec/df/85ecdf1c3611ecc9b7fa85282d9526e0.jpg";  
 
@@ -119,13 +93,18 @@ const UserStatuses = ({navigation, route}) => {
         activeOpacity={1}
         >
         <StatusBar hidden />
+          <View style={{justifyContent:"center",alignItems:"center",width: "100%", height: "100%",backgroundColor:"green",display:IsLoading ? "flex" : "none"}}>
+          <ActivityIndicator/>
+          </View>
         <Image
           source={{uri: imgProvider}}
+          onLoad={() => {setIsLoading(!IsLoading)}}
           onLoadEnd={() => {
             progress.setValue(0);
             start();
+            setIsLoading(false)
           }}
-          style={{resizeMode: 'cover', height: height,}}
+          style={{resizeMode: 'cover', height: height,display:IsLoading ? "none" : "flex"}}
         />
         <View
           style={{
@@ -174,7 +153,10 @@ const UserStatuses = ({navigation, route}) => {
             onPress={() => {
               previous();
             }}>
-            <View style={{top: 30, left: 10, flexDirection: 'row',opacity:enable == true ? 1 : 0}}>
+           <View></View>
+          </TouchableOpacity>
+          
+          <View style={{top: 30, left: 10,position:"absolute", flexDirection: 'row',opacity:enable == true ? 1 : 0}}>
               <Image
                 source={{uri: route.params.item.image}}
                 style={{height: 55, width: 55, borderRadius: 50,}}
@@ -189,7 +171,10 @@ const UserStatuses = ({navigation, route}) => {
                 {route.params.item.username}
               </Text>
             </View>
-          </TouchableOpacity>
+          <View style={{position:"absolute",bottom:0,left:0,right:0,opacity: enable == true ? 1 : 0}}>
+                <Feather name="chevron-up" size={24} color="white" style={{alignSelf:"center",top:10}}/>
+              <Text style={{color:"white",padding:30,textAlign:"center",bottom:10}}>Reply</Text>
+            </View>
           <TouchableOpacity
             style={{width: '30%', height: '100%'}}
             onPress={() => {

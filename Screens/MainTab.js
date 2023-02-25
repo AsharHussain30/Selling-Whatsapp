@@ -1,7 +1,6 @@
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import { TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {NavigationContainer} from '@react-navigation/native';
 import Chats from './Chats';
 import Status from './Status';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -11,75 +10,74 @@ import {useCamera} from 'react-native-camera-hooks';
 import Calls from './Calls';
 
 const MainTab = () => {
-
   const Tab = createMaterialTopTabNavigator();
 
-return (
-      <Tab.Navigator
-        initialRouteName="Chat"
-        screenOptions={{
-          tabBarContentContainerStyle: {
-            marginTop: 57,
-          },
-          tabBarPressColor: 'transparent',
-        }}>
-        <Tab.Screen
-          name="Camera"
-          component={Camera}
-          options={{
-            tabBarIndicatorStyle: {
-              backgroundColor: 'white',
+  return (
+        <Tab.Navigator
+          initialRouteName="Chat"
+          screenOptions={{
+            tabBarContentContainerStyle: {
+              marginTop: 57,
             },
-            tabBarActiveTintColor: 'white',
-            tabBarShowLabel: false,
-            tabBarIcon: () => (
-              <View style={{width: 50}}>
-                <EvilIcons name="camera" size={30} color="white" />
-              </View>
-            ),
-            tabBarStyle: {backgroundColor: '#075e55'},
-          }}
+            tabBarPressColor: 'transparent',
+          }}>
+          <Tab.Screen
+            name="Camera"
+            component={Camera}
+            options={{
+              tabBarIndicatorStyle: {
+                backgroundColor: 'white',
+              },
+              tabBarActiveTintColor: 'white',
+              tabBarShowLabel: false,
+              tabBarIcon: () => (
+                <View style={{width: 50}}>
+                  <EvilIcons name="camera" size={30} color="white" />
+                </View>
+              ),
+              tabBarStyle: {backgroundColor: '#075e55'},
+            }}
           />
-        <Tab.Screen
-          name="Chat"
-          component={Chats}
-          options={{
-            tabBarIndicatorStyle: {
-              backgroundColor: 'white',
-            },
-            tabBarActiveTintColor: 'white',
-            tabBarStyle: {backgroundColor: '#075e55'},
-          }}
+          <Tab.Screen
+            name="Chat"
+            component={Chats}
+            options={{
+              tabBarIndicatorStyle: {
+                backgroundColor: 'white',
+              },
+              tabBarActiveTintColor: 'white',
+              tabBarStyle: {backgroundColor: '#075e55'},
+            }}
           />
-        <Tab.Screen
-          name="Status"
-          component={Status}
-          options={{
-            tabBarIndicatorStyle: {backgroundColor: 'white'},
-            tabBarActiveTintColor: 'white',
-            tabBarStyle: {backgroundColor: '#075e55'},
-          }}
+          <Tab.Screen
+            name="Status"
+            component={Status}
+            options={{
+              tabBarIndicatorStyle: {backgroundColor: 'white'},
+              tabBarActiveTintColor: 'white',
+              tabBarStyle: {backgroundColor: '#075e55'},
+            }}
           />
-        <Tab.Screen
-          name="Calls"
-          component={Calls}
-          options={{
-            tabBarIndicatorStyle: {backgroundColor: 'white'},
-            tabBarActiveTintColor: 'white',
-            tabBarStyle: {backgroundColor: '#075e55'},
-          }}
+          <Tab.Screen
+            name="Calls"
+            component={Calls}
+            options={{
+              tabBarIndicatorStyle: {backgroundColor: 'white'},
+              tabBarActiveTintColor: 'white',
+              tabBarStyle: {backgroundColor: '#075e55'},
+            }}
           />
-      </Tab.Navigator>
+        </Tab.Navigator>
   );
 };
 
 const Camera = () => {
   const [{cameraRef}, {takePicture}] = useCamera(null);
-  
+
   const [torch, setTorch] = useState(false);
-  
+
   const [flip, setFlip] = useState(false);
-  
+
   const takingPicture = async () => {
     try {
       const data = await takePicture();
@@ -88,15 +86,16 @@ const Camera = () => {
       console.log(error);
     }
   };
-  
+
+
   return (
     <RNCamera
-    ref={cameraRef}
+      ref={cameraRef}
       type={flip ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back}
       flashMode={
         torch
-        ? RNCamera.Constants.FlashMode.torch
-        : RNCamera.Constants.FlashMode.off
+          ? RNCamera.Constants.FlashMode.torch
+          : RNCamera.Constants.FlashMode.off
       }
       style={{
         flex: 1,

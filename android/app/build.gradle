@@ -94,9 +94,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.whatsapp"
+    namespace "com.whatsappproject"
     defaultConfig {
-        applicationId "com.whatsapp"
+        applicationId "com.whatsappproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

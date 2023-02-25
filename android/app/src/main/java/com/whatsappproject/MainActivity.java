@@ -1,4 +1,4 @@
-package com.whatsapp;
+package com.whatsappproject;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

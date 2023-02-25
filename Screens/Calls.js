@@ -10,6 +10,7 @@ import React, {useRef, useState} from 'react';
 import Users from './Users.json';
 import {useNavigation} from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ScrollView } from 'react-native-virtualized-view';
 
 const {width, height} = Dimensions.get('window');
 
@@ -18,11 +19,9 @@ const Calls = () => {
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
       <FlatList
         data={Users}
-        style={{
-          top: 10,
-        }}
         renderItem={({item,index}) => {
           return (
             <TouchableOpacity
@@ -30,7 +29,7 @@ const Calls = () => {
               <View
                 style={{
                   height: 80,
-                  top: 0,
+                  top: 10,
                   elevation: 15,
                   width: width,
                   flexDirection: 'row',
@@ -96,6 +95,10 @@ const Calls = () => {
           );
         }}
       />
+              <View style={{flexDirection:"row",flex:1,justifyContent:"center",alignItems:"center",marginTop:10,marginBottom:10,height:60}}>
+          <MaterialCommunityIcons name="lock" size={20} color="gray" style={{right:10}}/><Text style={{color:"gray"}}>Personal Calls are </Text><Text style={{color:"green"}}>end to end encrypted</Text>
+        </View>
+        </ScrollView>
     </View>
   );
 };

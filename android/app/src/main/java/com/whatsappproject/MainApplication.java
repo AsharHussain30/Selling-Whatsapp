@@ -1,4 +1,4 @@
-package com.whatsapp;
+package com.whatsappproject;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

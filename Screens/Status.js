@@ -18,18 +18,12 @@ import {useEffect} from 'react';
 import {useCallback} from 'react';
 import {RNCamera} from 'react-native-camera';
 import { useCamera } from 'react-native-camera-hooks';
+import Users from "./Users.json"
+import { useNavigation } from '@react-navigation/native';
 
-const Status = ({navigation}) => {
+const Status = () => {
   const {height, width} = Dimensions.get('window');
-
-  const [getImage, setGetImg] = useState('');
-
-  const [currentName, setCurrentName] = useState('');
-
-  const [Name, setName] = useState('');
-
-  const [FireImage, setFireImage] = useState('');
-
+  const navigation = useNavigation();
   const [image, setImage] = useState('');
 
   const Camera = () => {
@@ -47,19 +41,25 @@ const Status = ({navigation}) => {
       setImage(image)
     });
   };
+  
+
 
   useEffect(() => {
-      onRefresh();
-  }, []);
+  const unsubscribe = navigation.addListener("focus",() => {
+    onRefresh();
+  })
+  return unsubscribe
+   }, []);
+
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
-  }
+  })
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -85,15 +85,11 @@ const Status = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('MyStatuses', {getImage, currentName})
+              navigation.navigate('MyStatuses')
             }
             style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
             <Image
-              source={{
-                uri: image
-                  ? image
-                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi0ToKk_pNdClvoT5zslZZ6iQV_xOVIktrsuYUt1FRunsvtjpXmW9lnTWzD8N1t2KLLnw&usqp=CAU',
-              }}
+              source={require("../assets/profile.jpg")}
               style={{
                 height: 55,
                 width: 55,
@@ -102,7 +98,7 @@ const Status = ({navigation}) => {
               }}
             />
             <View style={{flexDirection: 'column'}}>
-              <Text style={{fontWeight: '400', color: 'black', fontSize: 15}}>
+              <Text style={{fontWeight: '400', color: 'black', fontSize: height/53}}>
                 My Status
               </Text>
               <Text style={{fontWeight: '400', color: 'gray', fontSize: 10}}>
@@ -127,7 +123,7 @@ const Status = ({navigation}) => {
         <ScrollView horizontal scrollEnabled={false}>
           <FlatList
             keyExtractor={item => item.uid}
-            data={FireImage}
+            data={Users.slice(3,8)}
             renderItem={({item}) => {
               // console.log(item);
               return (
@@ -143,7 +139,7 @@ const Status = ({navigation}) => {
                   }}>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('UserStatuses', {item, Name})
+                      navigation.navigate('UserStatuses', {item})
                     }
                     style={{
                       flexDirection: 'row',
@@ -164,11 +160,20 @@ const Status = ({navigation}) => {
                         style={{
                           fontWeight: '400',
                           color: 'black',
-                          fontSize: 15,
+                          fontSize: height/50,
                         }}>
                         {item.username}
                       </Text>
+                      <Text
+                        style={{
+                          fontWeight: '400',
+                          color: 'black',
+                          fontSize: 13,
+                        }}>
+                        {item.statusdate}
+                      </Text>
                     </View>
+                    
                   </TouchableOpacity>
                 </View>
               );

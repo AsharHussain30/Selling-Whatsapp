@@ -1,13 +1,17 @@
-import {View, Text, FlatList, Image, TouchableOpacity, Animated} from 'react-native';
-import React from 'react';
+import {View, Text, FlatList, Image, TouchableOpacity, Animated, Dimensions} from 'react-native';
+import React, { useContext } from 'react';
 import {useEffect} from 'react';
 import {useState} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import { ChatProfileContext } from './UserChatDetail';
 
 const UserChatMenu = ({params}) => {
+
+  const ValueContext = useContext(ChatProfileContext)
+
   const navigation = useNavigation();
-    
+const {height,width} = Dimensions.get("window")    
 
   return (
     <View
@@ -15,8 +19,9 @@ const UserChatMenu = ({params}) => {
       backgroundColor: '#075e55',
       flexDirection: 'row',
         paddingHorizontal: 10,
-        paddingVertical: 15,
+        paddingVertical: 10,
         alignItems: 'center',
+        height:60
       }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <MaterialCommunityIcons
@@ -25,17 +30,21 @@ const UserChatMenu = ({params}) => {
           color="white"
           />
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => { 
+    ValueContext.setShowChatProfile(!ValueContext.ShowChatProfile)
+        }}>
       <Image
         source={{uri: params.image}}
         style={{
-          height: '150%',
-          width: '14%',
+          height: height/14,
+          width: height/14,
           resizeMode: 'cover',
           marginLeft: 6,
           marginRight: 5,
           borderRadius: 100,
         }}
       />
+      </TouchableOpacity>
           <View>
       <Text
         style={{

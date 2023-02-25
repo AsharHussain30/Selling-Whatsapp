@@ -10,10 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 // import Menu from './Menu';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {FlatList} from 'react-native-gesture-handler';
 import {
   Bubble,
   Day,
@@ -24,19 +23,21 @@ import {
 } from 'react-native-gifted-chat';
 import UserChatMenu from './UserChatMenu';
 import Chat from './Chat.json';
-import Users from './Users.json';
 import {Provider, Menu} from 'react-native-paper';
+import { MotiView } from 'moti';
+
+export const ChatProfileContext = createContext();
 
 const UserChatDetail = ({route, navigation}) => {
   const uid = route.params.params.uid;
 
   let chatMessages = Chat[0][uid];
+
   chatMessages = chatMessages.map(m => ({
     ...m,
     createdAt: new Date(m.createdAt),
   }));
   const [messages, setMessages] = useState(chatMessages);
-  const [users, setUsers] = useState();
 
   const onSend = messages => {
     const msg = messages[0];
@@ -52,17 +53,17 @@ const UserChatDetail = ({route, navigation}) => {
 
   function renderInputToolbar(props) {
     return (
-      <View style={{flex: 1, bottom: 3}}>
-        <InputToolbar
-          containerStyle={{
-            marginHorizontal: 10,
-            borderRadius: 50,
-            backgroundColor: 'white',
-            marginVertical: 6,
-          }}
-          {...props}
-        />
-      </View>
+      <InputToolbar
+        containerStyle={{
+          marginHorizontal: 10,
+          borderRadius: 50,
+          backgroundColor: 'white',
+          marginVertical: 10,
+          elevation: 14,
+          width: '80%',
+        }}
+        {...props}
+      />
     );
   }
 
@@ -82,64 +83,151 @@ const UserChatDetail = ({route, navigation}) => {
 
   const [press, setPress] = useState(false);
 
+  const [ShowChatProfile, setShowChatProfile] = useState(false);
+
   const openMenu = () => setPress(true);
 
   const closeMenu = () => setPress(false);
 
-  //   const Menu = () => {
-  //     return (
-
-  //         );
-  // };
-
-  useEffect(() => {}, []);
-
   const {height, width} = Dimensions.get('window');
+
+  const SelectedImage = route.params.params.image;
+
+
+
   return (
-    <View style={{flex: 1}}>
-      <StatusBar hidden />
+    <ChatProfileContext.Provider value={{setShowChatProfile,ShowChatProfile}}>
+    <View style={{flex: 1, height: height, width: width}}>
+      <TouchableOpacity activeOpacity={1} onPress={() => setShowChatProfile(false)} style={{flex:1}}>
 
       <UserChatMenu params={route.params.params}/>
 
       <ImageBackground
         source={require('../assets/chatBG.jpg')}
-        style={{height: height, width: width, resizeMode: 'contain', flex: 1}}>
+        style={{resizeMode: 'contain', flex: 1}}>
         <View
           style={{
-            zIndex: 1,
-            height:"100%",
-            width: '100%',
             position: 'absolute',
-            top:0,
-            left:0,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 3,
           }}>
           <Provider>
-            <Menu
-              visible={press}
-              anchorPosition="top"
-              contentStyle={{backgroundColor: 'white',left:197,bottom:125}}
-              onDismiss={closeMenu}
-              anchor={
-                <TouchableOpacity onPress={openMenu} style={{top:-43,left:370,right:0}}>
-                  <MaterialCommunityIcons
-                    name="dots-vertical"
-                    size={25}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              }>
-              <Menu.Item onPress={() => {}} title="Label Chat" style={{}} />
-              <Menu.Item onPress={() => {}} title="View contact" style={{}} />
-              <Menu.Item onPress={() => {}} title="Media, links, and docs" style={{}} />
-              <Menu.Item onPress={() => {}} title="Mute Notification" style={{}} />
-              <Menu.Item onPress={() => {}} title="Disappearing messages" style={{}} />
-              <Menu.Item onPress={() => {}} title="Wallpaper" style={{}} />
-              <Menu.Item onPress={() => {}} title="More" style={{}} />
-            </Menu>
+            <View
+              style={{
+                justifyContent: 'flex-start',
+                height: '85%',
+                right: 10,
+                position: 'absolute',
+              }}>
+              <Menu
+                visible={press}
+                anchorPosition="top"
+                contentStyle={{
+                  backgroundColor: 'white',
+                  top: -120,
+                  left: 10,
+                }}
+                onDismiss={closeMenu}
+                anchor={
+                  <TouchableOpacity onPress={openMenu} style={{top: -42}}>
+                    <MaterialCommunityIcons
+                      name="dots-vertical"
+                      size={width / 18}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                }>
+                <Menu.Item onPress={() => {}} title="View contact" style={{}} />
+                <Menu.Item onPress={() => {}} title="Label Chat" style={{}} />
+                <Menu.Item
+                  onPress={() => {}}
+                  title="Media, links, and docs"
+                  style={{}}
+                />
+                <Menu.Item
+                  onPress={() => {}}
+                  title="Mute Notification"
+                  style={{}}
+                />
+                <Menu.Item
+                  onPress={() => {}}
+                  title="Disappearing messages"
+                  style={{}}
+                />
+                <Menu.Item onPress={() => {}} title="Wallpaper" style={{}} />
+                <Menu.Item onPress={() => {}} title="More" style={{}} />
+              </Menu>
+            </View>
           </Provider>
         </View>
 
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, zIndex: press ? 1 : 3}}>
+        {ShowChatProfile == true ? (
+          <MotiView
+          from={{
+            scale:1.4
+          }}
+            animate={{
+              scale:1
+            }}
+            style={{backgroundColor: 'white', position: 'absolute',borderRadius:20,zIndex:4,left:height/14,right:height/14,top:height/6}}>
+            <View
+              style={{
+                height: 40,
+                justifyContent: 'center',
+                paddingLeft: 20,
+                borderTopLeftRadius:20,
+                borderTopRightRadius:20,
+                backgroundColor: '#075e55',
+              }}>
+              <Text style={{color: 'white'}}>{route.params.params.username}</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('FullProfile', {
+                  params: route.params.params.username,
+                  SelectedImage,
+                })
+              }>
+              <Image
+                source={{uri: SelectedImage}}
+                style={{height: height/2.5, width: "100%", resizeMode: 'cover'}}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+              }}>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="android-messages"
+                  size={24}
+                  color="green"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="phone-plus"
+                  size={24}
+                  color="green"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={24}
+                  color="green"
+                />
+              </TouchableOpacity>
+            </View>
+          </MotiView>
+        ) : null}
           <GiftedChat
             timeTextStyle={{
               right: {color: '#8aa275'},
@@ -151,7 +239,7 @@ const UserChatDetail = ({route, navigation}) => {
             renderBubble={props => {
               return (
                 <Bubble
-                  {...props}
+                {...props}
                   wrapperStyle={{
                     right: {
                       backgroundColor: '#e2ffc7',
@@ -177,83 +265,44 @@ const UserChatDetail = ({route, navigation}) => {
             renderInputToolbar={renderInputToolbar}
             renderSend={props => {
               return (
-                <Send {...props}>
-                  <View style={{}}>
-                    <Text
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: -60,
+                    top: 2,
+                  }}>
+                  <Send {...props} containerStyle={{}} alwaysShowSend={true}>
+                    <View
                       style={{
-                        textAlignVertical: 'center',
                         backgroundColor: '#075e55',
-                        padding: 10,
-                        borderRadius: 34,
+                        borderRadius: 100,
+                        height: 50,
+                        width: 50,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}>
                       <MaterialCommunityIcons
                         name="send"
                         size={20}
                         color="white"
                       />
-                    </Text>
-                  </View>
-                </Send>
+                    </View>
+                  </Send>
+                </View>
               );
             }}
             messages={messages}
             onSend={messages => onSend(messages)}
             user={{
               _id: 'MyId',
-              received: true,
             }}
           />
         </View>
-        {/* <View
-          style={{
-            justifyContent: 'flex-end',
-            backgroundColor: 'white',
-            height: 50,
-            width: height / 2.2,
-            position: 'absolute',
-            marginHorizontal: 5,
-            marginVertical: 10,
-            bottom: 0,
-            borderRadius: 25,
-          }}>
-          <TextInput
-            placeholder="Type a message"
-            placeholderTextColor="silver"
-            value={message}
-            onChangeText={e => setMessage(e)}
-            style={{marginLeft: 10}}
-          />
-        </View>
-        <TouchableOpacity
-          onPress={() => send()}
-          style={{
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            backgroundColor: '#075e55',
-            padding: 15,
-            margin: 10,
-            borderRadius: 100,
-          }}>
-          <Image
-            source={require('../Assets/Post.png')}
-            style={{
-              width: 20,
-              height: 20,
-              resizeMode: 'cover',
-              marginVertical: 0,
-              marginRight: 0,
-              alignSelf: 'center',
-            }}
-          />
-        </TouchableOpacity> */}
       </ImageBackground>
+      </TouchableOpacity>
     </View>
+    </ChatProfileContext.Provider>
   );
 };
 
 export default UserChatDetail;
-
-const styles = StyleSheet.create({});

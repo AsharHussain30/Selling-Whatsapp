@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@mobile-reality/react-native-select-pro": "^2.1.1",
     "@react-navigation/bottom-tabs": "^6.5.5",
     "@react-navigation/drawer": "^6.6.0",
     "@react-navigation/material-top-tabs": "^6.6.0",
@@ -23,7 +24,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-camera-hooks": "^0.5.3",
     "react-native-gesture-handler": "^2.9.0",
-    "react-native-gifted-chat": "^1.1.1",
+    "react-native-gifted-chat": "^1.0.4",
     "react-native-image-crop-picker": "^0.39.0",
     "react-native-pager-view": "^6.1.4",
     "react-native-paper": "^5.2.0",
@@ -34,7 +35,8 @@
     "react-native-screens": "^3.20.0",
     "react-native-searchable-dropdown": "^1.1.3",
     "react-native-searchable-material-dropdown": "^1.0.3",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-virtualized-view": "^0.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

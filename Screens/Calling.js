@@ -13,7 +13,7 @@ const Calling = ({route}) => {
 const navigation = useNavigation()
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1,backgroundColor:"white"}}>
       <Image
         source={{uri: route.params.params.image}}
         style={{
@@ -29,6 +29,7 @@ const navigation = useNavigation()
           flex: 1,
           borderTopLeftRadius: 45,
           borderTopRightRadius: 45,
+          bottom:height/30,
         }}>
         <View
           style={{
@@ -57,8 +58,8 @@ const navigation = useNavigation()
           style={{
             textAlign: 'center',
             color: 'black',
-            fontSize: 25,
-            paddingTop: 20,
+            fontSize: height / 30,
+            paddingTop: height /50,
             fontWeight: '600',
           }}>
           {route.params.params.username}
@@ -80,7 +81,8 @@ const navigation = useNavigation()
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             alignItems: 'flex-end',
-            paddingBottom: 30,
+            paddingBottom: height /30,
+            
           }}>
           <TouchableOpacity onPress={() => setMicIcon(!MicIcon)}>
             {MicIcon ? (
@@ -90,7 +92,7 @@ const navigation = useNavigation()
                 color="white"
                 style={{
                   backgroundColor: '#054d44',
-                  padding: 20,
+                  padding: height / 42,
                   borderRadius: 34,
                 }}
               />
@@ -101,7 +103,7 @@ const navigation = useNavigation()
                 color="white"
                 style={{
                   backgroundColor: '#054d44',
-                  padding: 20,
+                  padding: height / 42,
                   borderRadius: 34,
                 }}
               />
@@ -115,14 +117,14 @@ const navigation = useNavigation()
             name="volume-mute"
             size={25}
             color="white"
-            style={{backgroundColor: '#054d44', padding: 20, borderRadius: 34}}
+            style={{backgroundColor: '#054d44', padding: height / 40, borderRadius: 34}}
           />
           :
           <IonIcons
             name="volume-high"
             size={25}
             color="white"
-            style={{backgroundColor: '#054d44', padding: 20, borderRadius: 34}}
+            style={{backgroundColor: '#054d44', padding: height / 40, borderRadius: 34}}
           />
 }
 </TouchableOpacity>
@@ -133,7 +135,7 @@ const navigation = useNavigation()
             name="phone-off"
             size={25}
             color="white"
-            style={{backgroundColor: '#054d44', padding: 20, borderRadius: 34}}
+            style={{backgroundColor: '#054d44', padding: height / 40, borderRadius: 34}}
           />
           </TouchableOpacity>
         </View>
